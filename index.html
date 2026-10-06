@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Al Saada | Workers Registry</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#1c2433;--mut:#6b7587;--line:#e1e6ee;--pri:#2f6fcf;--pri2:#e8f0fc;
+--ok:#1f9d57;--warn:#d98a00;--bad:#d64545;--info:#7a4fd0}
+@media(prefers-color-scheme:dark){:root{--bg:#10141c;--card:#192030;--ink:#e8ecf4;--mut:#93a0b8;--line:#2a3347;--pri:#6aa3f5;--pri2:#1f2d49}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,Arial,sans-serif;font-size:15px}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+header h1{font-size:18px;margin:0;flex:1}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.sec{background:var(--pri2);color:var(--pri)}
+#adm{display:contents}#adm[hidden]{display:none}
+.btn.bad{background:var(--bad)}
+.who{font-size:12px;color:var(--mut)}
+main{max-width:1250px;margin:0 auto;padding:16px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;min-width:90px;text-align:center}
+.stat b{display:block;font-size:20px}.stat span{font-size:12px;color:var(--mut)}
+.stat.on{outline:2px solid var(--pri)}
+.filters{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.filters label{font-size:12px;color:var(--mut);display:block;margin-bottom:3px}
+.filters input,.filters select,.f input,.f select,.f textarea,.login input{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.chk{display:flex;gap:10px;flex-wrap:wrap;align-items:center;grid-column:1/-1}
+.chk label{display:flex;gap:4px;align-items:center;color:var(--ink);font-size:13px;margin:0}
+.chk input{width:auto}
+.count{color:var(--mut);margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.card:hover{border-color:var(--pri)}
+.ph{height:150px;background:var(--pri2);display:flex;align-items:center;justify-content:center;font-size:44px;color:var(--pri);position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;object-position:top}
+.badge{position:absolute;top:8px;inset-inline-start:8px;color:#fff;border-radius:20px;padding:2px 10px;font-size:12px}
+.card .b{padding:10px 12px;flex:1}
+.card h3{margin:0 0 4px;font-size:15px}
+.meta{color:var(--mut);font-size:13px;line-height:1.7}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.tag{background:var(--pri2);color:var(--pri);border-radius:6px;padding:1px 7px;font-size:12px}
+.s-available{background:var(--ok)}.s-reserved{background:var(--warn)}.s-contract{background:var(--pri)}
+.s-process{background:var(--info)}.s-delivered{background:#3a4660}.s-returned{background:var(--bad)}
+dialog{border:0;border-radius:14px;padding:0;width:min(760px,94vw);background:var(--card);color:var(--ink);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.dh{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.dh h2{margin:0;font-size:17px}
+.db{padding:16px 18px;overflow:auto;max-height:68vh}
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.f label{font-size:12px;color:var(--mut);display:block;margin-bottom:3px}
+.f .full{grid-column:1/-1}
+.sec-t{font-weight:600;margin:16px 0 8px;color:var(--pri)}
+.df{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:space-between}
+.warn{color:var(--bad);font-size:12px}
+.empty{text-align:center;color:var(--mut);padding:40px}
+.log{font-size:12px;color:var(--mut);line-height:1.8;margin-top:6px}
+.login{max-width:340px;margin:12vh auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
+.login h2{margin:0 0 4px}.login p{margin:0 0 16px;color:var(--mut);font-size:13px}
+.login label{font-size:12px;color:var(--mut);display:block;margin:10px 0 3px}
+.login .btn{width:100%;margin-top:16px;padding:10px}
+.err{color:var(--bad);font-size:13px;margin-top:10px;min-height:18px}
+#app[hidden],#loginBox[hidden]{display:none}
+</style>
+</head>
+<body>
+
+<div id="loginBox" hidden>
+  <form class="login" id="loginForm">
+    <h2>Al Saada</h2>
+    <p>Workers Registry · staff sign in</p>
+    <label>Email</label><input id="em" type="email" autocomplete="username" required>
+    <label>Password</label><input id="pw" type="password" autocomplete="current-password" required>
+    <button class="btn" id="loginBtn">Sign in</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+<header>
+  <h1>Al Saada · Workers Registry</h1>
+  <span class="who" id="who"></span>
+  <button class="btn" id="add">+ New Worker</button>
+  <span id="adm" hidden>
+  <button class="btn sec" id="exp">Export CSV</button>
+  </span>
+  <button class="btn sec" id="chg">Change password</button>
+  <button class="btn sec" id="out">Sign out</button>
+</header>
+<main>
+  <div class="stats" id="stats"></div>
+  <div class="filters" id="filters">
+    <div><label>Search (name / passport / customer)</label><input id="q" placeholder="Search..."></div>
+    <div><label>CV Category</label><select id="fgrp"></select></div>
+    <div><label>Position</label><select id="fpos"></select></div>
+    <div><label>Nationality</label><select id="fnat"></select></div>
+    <div><label>Status</label><select id="fst"></select></div>
+    <div><label>Age from</label><input id="fa1" type="number" min="18" max="65"></div>
+    <div><label>Age to</label><input id="fa2" type="number" min="18" max="65"></div>
+    <div><label>English</label><select id="feng"><option value="">All</option><option>GOOD</option><option>FAIR</option><option>NO</option></select></div>
+    <div><label>Arabic</label><select id="far"><option value="">All</option><option>GOOD</option><option>FAIR</option><option>NO</option></select></div>
+    <div><label>Religion</label><select id="frel"></select></div>
+    <div class="chk">
+      <b style="font-size:13px">Skills:</b>
+      <label><input type="checkbox" data-sk="cleaning">Cleaning</label>
+      <label><input type="checkbox" data-sk="babysitting">Babysitting</label>
+      <label><input type="checkbox" data-sk="cooking">Cooking</label>
+      <label><input type="checkbox" data-sk="laundry">Laundry</label>
+      <label><input type="checkbox" data-sk="ironing">Ironing</label>
+      <label><input type="checkbox" id="fexp">Has work experience</label>
+      <button class="btn sec" id="reset" style="margin-inline-start:auto">Clear filters</button>
+    </div>
+  </div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog id="dlg">
+  <div class="dh"><h2 id="dt"></h2><button class="btn sec" id="x">Close</button></div>
+  <div class="db"><div id="form"></div></div>
+  <div class="df"><button class="btn bad" id="del">Delete</button><div style="display:flex;gap:8px"><button class="btn sec" id="x2">Cancel</button><button class="btn" id="save">Save</button></div></div>
+</dialog>
+
+<dialog id="pwdlg" style="width:min(400px,94vw)">
+  <form id="pwForm" autocomplete="off">
+    <div class="dh"><h2>Change password</h2><button type="button" class="btn sec" id="pwx">Close</button></div>
+    <div class="db login" style="margin:0;border:0;padding:16px 18px">
+      <label>Current password</label><input id="pw0" type="password" autocomplete="off" required>
+      <label>New password</label><input id="pw1" type="password" autocomplete="new-password" required>
+      <label>Confirm new password</label><input id="pw2" type="password" autocomplete="new-password" required>
+      <div class="log">At least 10 characters, with letters and numbers. Type it in; pasting is disabled.</div>
+      <div class="err" id="pwErr"></div>
+    </div>
+    <div class="df"><span></span><div style="display:flex;gap:8px"><button type="button" class="btn sec" id="pwc">Cancel</button><button class="btn" id="pwgo">Update password</button></div></div>
+  </form>
+</dialog>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://ytkwkrqhphrkzfqyuskr.supabase.co';
+const SUPABASE_KEY='sb_publishable_RdNMU1q47ZBc3u5yJFeFpg_zne0hY4a'; // publishable key: safe in the browser, data is protected by login + row-level security
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const STATUS={available:'Available',reserved:'Reserved',contract:'Contract Signed',process:'In Process (medical / visa / EID)',delivered:'Delivered',returned:'Returned / Absconded'};
+const SKILLS={cleaning:'Cleaning',babysitting:'Babysitting',cooking:'Cooking',laundry:'Laundry',ironing:'Ironing'};
+let W=[];let editing=null;const URLS={};let channel=null;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function age(d){if(!d)return'';const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a}
+const uniq=k=>[...new Set(W.map(w=>w[k]).filter(Boolean))].sort();
+function opts(el,list,all='All'){const v=el.value;el.innerHTML=`<option value="">${all}</option>`+list.map(x=>`<option>${esc(x)}</option>`).join('');el.value=v}
+function fillFilters(){opts($('#fgrp'),uniq('group'));opts($('#fpos'),uniq('position'));opts($('#fnat'),uniq('nationality'));opts($('#frel'),uniq('religion'));
+ const v=$('#fst').value;$('#fst').innerHTML='<option value="">All</option>'+Object.entries(STATUS).map(([k,t])=>`<option value="${k}">${t}</option>`).join('');$('#fst').value=v}
+
+/* ---------- auth ---------- */
+function showLogin(){$('#app').hidden=true;$('#loginBox').hidden=false;if(channel){sb.removeChannel(channel);channel=null}W=[]}
+async function start(session){
+ $('#loginBox').hidden=true;$('#app').hidden=false;$('#who').textContent=session.user.email;
+ if(new URLSearchParams(location.search).has('admin'))$('#adm').hidden=false;
+ await loadAll();subscribe()}
+$('#loginForm').onsubmit=async e=>{e.preventDefault();$('#loginErr').textContent='';$('#loginBtn').disabled=true;
+ const {error}=await sb.auth.signInWithPassword({email:$('#em').value.trim().toLowerCase(),password:$('#pw').value});
+ $('#loginBtn').disabled=false;
+ if(error){$('#loginErr').textContent='Wrong email or password.';return}
+ $('#pw').value=''};
+$('#out').onclick=()=>sb.auth.signOut();
+
+/* ---------- change password ---------- */
+const PWF=['#pw0','#pw1','#pw2'];
+PWF.forEach(s=>['paste','copy','cut','drop','contextmenu'].forEach(ev=>$(s).addEventListener(ev,e=>e.preventDefault())));
+function pwClose(){$('#pwdlg').close()}
+$('#chg').onclick=()=>{PWF.forEach(s=>$(s).value='');$('#pwErr').textContent='';$('#pwErr').style.color='';$('#pwdlg').showModal()};
+$('#pwx').onclick=$('#pwc').onclick=pwClose;
+$('#pwForm').onsubmit=async e=>{e.preventDefault();
+ const err=m=>{$('#pwErr').style.color='';$('#pwErr').textContent=m};
+ const cur=$('#pw0').value,a=$('#pw1').value,b=$('#pw2').value;
+ if(a!==b)return err('The two new passwords do not match.');
+ if(a.length<10||!/[A-Za-z]/.test(a)||!/\d/.test(a))return err('New password must be at least 10 characters with letters and numbers.');
+ if(a===cur)return err('New password must be different from the current one.');
+ $('#pwgo').disabled=true;
+ const {data:{user}}=await sb.auth.getUser();
+ const chk=await sb.auth.signInWithPassword({email:user.email,password:cur});
+ if(chk.error){$('#pwgo').disabled=false;return err('Current password is wrong.')}
+ const {error}=await sb.auth.updateUser({password:a});
+ $('#pwgo').disabled=false;
+ if(error)return err('Could not update: '+error.message);
+ PWF.forEach(s=>$(s).value='');
+ $('#pwErr').style.color='var(--ok)';$('#pwErr').textContent='Password updated.';
+ setTimeout(pwClose,1200)};
+sb.auth.onAuthStateChange((ev,session)=>{
+ // do not await Supabase calls inside this callback
+ if(ev==='SIGNED_OUT')showLogin();
+ else if((ev==='SIGNED_IN'||ev==='INITIAL_SESSION')&&session&&$('#app').hidden)setTimeout(()=>start(session),0)});
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(!session)showLogin()})();
+
+/* ---------- data ---------- */
+async function loadAll(){
+ const {data,error}=await sb.from('workers').select('data').order('id');
+ if(error){alert('Could not load workers: '+error.message);return}
+ W=data.map(r=>r.data);
+ W.sort((a,b)=>String(a.id).localeCompare(String(b.id),undefined,{numeric:true}));
+ fillFilters();render();await resolveUrls();render()}
+async function resolveUrls(){
+ const need=[...new Set(W.map(w=>w.photo).filter(p=>p&&!URLS[p]))];
+ if(!need.length)return;
+ const {data}=await sb.storage.from('files').createSignedUrls(need,43200);
+ (data||[]).forEach(d=>{if(d.signedUrl)URLS[d.path]=d.signedUrl})}
+function subscribe(){
+ if(channel)sb.removeChannel(channel);
+ channel=sb.channel('workers-live').on('postgres_changes',{event:'*',schema:'public',table:'workers'},async p=>{
+  if(p.eventType==='DELETE'){W=W.filter(w=>w.id!==p.old.id)}
+  else{const w=p.new.data,i=W.findIndex(x=>x.id===w.id);if(i>=0)W[i]=w;else W.push(w)}
+  fillFilters();render();await resolveUrls();render()}).subscribe()}
+
+/* ---------- list ---------- */
+function passes(w){
+ const q=$('#q').value.trim().toLowerCase();
+ if(q&&!(w.name+' '+w.passport+' '+w.customer+' '+w.contractNo).toLowerCase().includes(q))return false;
+ if($('#fgrp').value&&w.group!==$('#fgrp').value)return false;
+ if($('#fpos').value&&w.position!==$('#fpos').value)return false;
+ if($('#fnat').value&&w.nationality!==$('#fnat').value)return false;
+ if($('#frel').value&&w.religion!==$('#frel').value)return false;
+ if($('#fst').value&&w.status!==$('#fst').value)return false;
+ const a=age(w.dob),a1=+$('#fa1').value,a2=+$('#fa2').value;
+ if(a1&&(!a||a<a1))return false;if(a2&&(!a||a>a2))return false;
+ if($('#feng').value&&w.english!==$('#feng').value)return false;
+ if($('#far').value&&w.arabic!==$('#far').value)return false;
+ for(const c of document.querySelectorAll('[data-sk]:checked'))if(!/^(YES|BASIC)/.test(w.skills[c.dataset.sk]||''))return false;
+ if($('#fexp').checked&&!(w.expYears&&w.expYears!=='0'))return false;
+ return true}
+function render(){
+ const counts={};W.forEach(w=>counts[w.status]=(counts[w.status]||0)+1);
+ $('#stats').innerHTML=`<div class="stat ${$('#fst').value?'':'on'}" data-s=""><b>${W.length}</b><span>All</span></div>`+
+  Object.entries(STATUS).map(([k,v])=>`<div class="stat ${$('#fst').value===k?'on':''}" data-s="${k}"><b>${counts[k]||0}</b><span>${v.split(' (')[0]}</span></div>`).join('');
+ const list=W.filter(passes);
+ $('#count').textContent=`Results: ${list.length}`;
+ $('#grid').innerHTML=list.length?list.map(card).join(''):'<div class="empty" style="grid-column:1/-1">No results</div>';}
+function card(w){
+ const sk=Object.entries(SKILLS).filter(([k])=>/^(YES|BASIC)/.test((w.skills||{})[k]||'')).map(([k,v])=>`<span class="tag">${v}</span>`).join('');
+ const bk=w.customer?`<div class="meta">Customer: ${esc(w.customer)}</div>`:'';
+ const img=URLS[w.photo]?`<img loading="lazy" src="${URLS[w.photo]}">`:'👤';
+ return `<div class="card" data-id="${esc(w.id)}"><div class="ph">${img}<span class="badge s-${w.status}">${STATUS[w.status].split(' (')[0]}</span></div>
+ <div class="b"><h3>${esc(w.name)}</h3><div class="meta">${esc(w.position)} · ${esc(w.group||w.nationality)}<br>Age ${age(w.dob)||'—'} · ${esc(w.religion)} · EN: ${esc(w.english||'—')} / AR: ${esc(w.arabic||'—')}</div>${bk}<div class="tags">${sk}</div></div></div>`}
+
+/* ---------- edit form ---------- */
+function fld(label,key,v,type='text',cls=''){return `<div class="${cls}"><label>${label}</label><input data-k="${key}" type="${type}" value="${esc(v)}"></div>`}
+function sel(label,key,v,list){if(v&&!list.includes(v))list=list.concat(v);return `<div><label>${label}</label><select data-k="${key}">${list.map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('')}</select></div>`}
+function open(id){
+ const w=id?W.find(x=>x.id===id):{id:'w'+Date.now(),name:'',position:'',salary:'',contract:'2 YEARS',nationality:'',religion:'',marital:'',children:0,dob:'',weight:'',height:'',passport:'',issuePlace:'',issueDate:'',expiry:'',education:'',english:'GOOD',arabic:'NO',skills:{},expYears:'',expPosition:'',expCountry:'',status:'available',customer:'',bookDate:'',contractNo:'',deliveryDate:'',notes:'',cvLink:'',photo:'',log:[]};
+ editing={w:JSON.parse(JSON.stringify(w)),isNew:!id};
+ w.skills=w.skills||{};
+ $('#dt').textContent=id?w.name:'New Worker';$('#del').style.display=id?'':'none';
+ const lv=['GOOD','FAIR','NO'],yn=['YES','NO','WILLING'];
+ const exp=new Date(w.expiry),soon=w.expiry&&(exp-new Date())/864e5<180;
+ $('#form').innerHTML=`
+ <div class="sec-t">Status &amp; Tracking</div>
+ <div class="f">
+  <div><label>Status</label><select data-k="status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===w.status?'selected':''}>${v}</option>`).join('')}</select></div>
+  ${fld('Customer name','customer',w.customer)}${fld('Booking date','bookDate',w.bookDate,'date')}
+  ${fld('Contract no.','contractNo',w.contractNo)}${fld('Delivery date','deliveryDate',w.deliveryDate,'date')}
+  <div class="full"><label>Notes (return / absconding reason, etc.)</label><textarea data-k="notes" rows="2">${esc(w.notes)}</textarea></div>
+ </div>
+ ${id&&w.status!=='available'?'<div style="margin-top:8px"><button type="button" class="btn sec" id="rel">↺ Reset to Available (clears customer &amp; booking)</button></div>':''}
+ <div class="log">${(w.log||[]).slice().reverse().map(l=>esc(l)).join('<br>')}</div>
+ <div class="sec-t">Applicant Details</div>
+ <div class="f">
+  ${fld('Name','name',w.name)}${fld('Position applied','position',w.position)}${fld('Monthly salary','salary',w.salary)}${fld('Contract period','contract',w.contract)}
+  ${fld('Nationality','nationality',w.nationality)}${fld('Religion','religion',w.religion)}${fld('Marital status','marital',w.marital)}${fld('No. of children','children',w.children,'number')}
+  ${fld('Date of birth','dob',w.dob,'date')}${fld('Weight (kg)','weight',w.weight,'number')}${fld('Height','height',w.height)}${fld('Education','education',w.education)}
+  ${sel('English','english',w.english,lv)}${sel('Arabic','arabic',w.arabic,lv)}
+ </div>
+ <div class="sec-t">Passport</div>
+ <div class="f">${fld('Passport number','passport',w.passport)}${fld('Place of issue','issuePlace',w.issuePlace)}${fld('Issue date','issueDate',w.issueDate,'date')}${fld('Expiry date','expiry',w.expiry,'date')}</div>
+ ${soon?'<div class="warn">⚠ Passport expires in less than 6 months</div>':''}
+ <div class="sec-t">Skills &amp; Experience</div>
+ <div class="f">${Object.entries(SKILLS).map(([k,v])=>sel(v,'sk_'+k,w.skills[k]||'NO',yn)).join('')}
+  ${fld('Years of experience','expYears',w.expYears)}${fld('Experience position','expPosition',w.expPosition)}${fld('Experience country','expCountry',w.expCountry)}</div>
+ <div class="sec-t">Files</div>
+ <div class="f">${w.cvImage?`<div class="full"><a href="#" id="cvv">📄 View original CV (${esc(w.group||'')})</a></div>`:''}${fld('CV link (Google Drive)','cvLink',w.cvLink,'url','full')}
+  <div class="full"><label>Photo</label><input type="file" id="pf" accept="image/*"><div class="log" id="pfs"></div></div></div>`;
+ if($('#rel'))$('#rel').onclick=()=>{if(!confirm('Clear customer, booking and contract details and mark Available?'))return;
+  ['customer','bookDate','contractNo','deliveryDate'].forEach(k=>document.querySelector(`#form [data-k=${k}]`).value='');
+  document.querySelector('#form [data-k=status]').value='available';save()};
+ const stSel=()=>document.querySelector('#form [data-k=status]');
+ const adv=(from,to)=>{if(from.includes(stSel().value))stSel().value=to};
+ ['customer','bookDate'].forEach(k=>document.querySelector(`#form [data-k=${k}]`).addEventListener('input',e=>{if(e.target.value)adv(['available'],'reserved')}));
+ document.querySelector('#form [data-k=contractNo]').addEventListener('input',e=>{if(e.target.value)adv(['available','reserved'],'contract')});
+ if($('#cvv'))$('#cvv').onclick=async e=>{e.preventDefault();const win=window.open('','_blank');
+  const {data,error}=await sb.storage.from('files').createSignedUrl(w.cvImage,300);
+  if(error||!data){win.close();alert('Could not open the CV.');return}win.location=data.signedUrl};
+ $('#pf').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('#pfs').textContent='Uploading...';
+  try{const blob=await shrinkBlob(f),path=`photos/${editing.w.id}-${Date.now()}.jpg`;
+   const {error}=await sb.storage.from('files').upload(path,blob,{contentType:'image/jpeg'});
+   if(error)throw error;editing.w.photo=path;await resolveUrls();$('#pfs').textContent='Photo uploaded. Press Save to keep it.'}
+  catch(err){$('#pfs').textContent='Upload failed: '+(err.message||err)}};
+ $('#dlg').showModal()}
+async function shrinkBlob(file){const bmp=await createImageBitmap(file),s=Math.min(1,500/bmp.width),c=document.createElement('canvas');
+ c.width=bmp.width*s;c.height=bmp.height*s;c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+ return new Promise(r=>c.toBlob(r,'image/jpeg',.85))}
+async function save(){
+ const w=editing.w,old=W.find(x=>x.id===w.id);
+ document.querySelectorAll('#form [data-k]').forEach(el=>{const k=el.dataset.k;if(k.startsWith('sk_'))w.skills[k.slice(3)]=el.value;else w[k]=el.value});
+ if(!w.name.trim()){alert('Name is required');return}
+ if(editing.isNew||old.status===w.status){
+  if(['available','reserved'].includes(w.status)&&w.contractNo)w.status='contract';
+  else if(w.status==='available'&&(w.customer||w.bookDate))w.status='reserved';}
+ w.log=w.log||[];const t=new Date().toLocaleString('en-GB');
+ if(editing.isNew)w.log.push(`${t} — Added (${STATUS[w.status]})`);
+ else if(old.status!==w.status)w.log.push(`${t} — ${STATUS[old.status]} → ${STATUS[w.status]}${w.customer?' · '+w.customer:''}`);
+ $('#save').disabled=true;
+ const {error}=await sb.from('workers').upsert({id:w.id,data:w,updated_at:new Date().toISOString()});
+ $('#save').disabled=false;
+ if(error){alert('Could not save: '+error.message+'\nNothing was changed.');return}
+ const i=W.findIndex(x=>x.id===w.id);if(i>=0)W[i]=w;else W.unshift(w);
+ fillFilters();render();$('#dlg').close()}
+async function del(){
+ if(!confirm('Delete this worker permanently?'))return;
+ const id=editing.w.id,{error}=await sb.from('workers').delete().eq('id',id);
+ if(error){alert('Could not delete: '+error.message);return}
+ W=W.filter(x=>x.id!==id);fillFilters();render();$('#dlg').close()}
+
+/* ---------- misc ---------- */
+function csv(){const h=['name','position','nationality','religion','age','status','customer','bookDate','contractNo','deliveryDate','passport','expiry','english','arabic','salary','cvLink','notes'];
+ const rows=[h.join(',')].concat(W.map(w=>h.map(k=>{let v=k==='age'?age(w.dob):k==='status'?STATUS[w.status]:w[k];return '"'+String(v??'').replace(/"/g,'""')+'"'}).join(',')));
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\n')],{type:'text/csv;charset=utf-8'}));a.download='workers.csv';a.click()}
+document.addEventListener('input',e=>{if(e.target.closest('#filters'))render()});
+document.addEventListener('change',e=>{if(e.target.closest('#filters'))render()});
+$('#stats').onclick=e=>{const s=e.target.closest('.stat');if(!s)return;$('#fst').value=s.dataset.s;render()};
+$('#grid').onclick=e=>{const c=e.target.closest('.card');if(c)open(c.dataset.id)};
+$('#add').onclick=()=>open();
+$('#x').onclick=$('#x2').onclick=()=>$('#dlg').close();
+$('#save').onclick=save;$('#del').onclick=del;
+$('#reset').onclick=()=>{document.querySelectorAll('#filters input').forEach(i=>i.type==='checkbox'?i.checked=false:i.value='');document.querySelectorAll('#filters select').forEach(s=>s.value='');render()};
+$('#exp').onclick=csv;
+</script>
+</body>
+</html>
